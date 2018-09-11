@@ -60,17 +60,17 @@ class OpenPoseFace(object):
         -------
         outs: OpenPose object
         """
-        self.op = self._libop.newOP(params["logging_level"],
-                                    self.encode(params["net_output_size"]),
-                                    self.encode(params["net_input_size"]),
-                                    params["num_gpu_start"],
-                                    self.encode(params["default_model_folder"]))
+        self.op = self._libop.newOPFace(params["logging_level"],
+                                        self.encode(params["net_output_size"]),
+                                        self.encode(params["net_input_size"]),
+                                        params["num_gpu_start"],
+                                        self.encode(params["default_model_folder"]))
 
     def __del__(self):
         """
         OpenPose Destructor: Destroys OpenPose object
         """
-        self._libop.delOP(self.op)
+        self._libop.delOPFace(self.op)
 
     def forward(self, image, face_rectangles):
         """
@@ -87,7 +87,9 @@ class OpenPoseFace(object):
         """
         shape = image.shape
         size = np.zeros(shape=(3), dtype=np.int32)
-        self._libop.forward(self.op, image, shape[0], shape[1], ct.byref(face_rectangles), len(face_rectangles),size)
+        num_faces = len(face_rectangles)
+        fr = (RECT*num_faces)(*face_rectangles)
+        self._libop.forward(self.op, image, shape[0], shape[1], ct.byref(fr[0]), num_faces, size)
         array = np.zeros(shape=(size), dtype=np.float32)
         self._libop.getOutputs(self.op, array)
         return array
