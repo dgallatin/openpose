@@ -23,12 +23,11 @@
 #endif
 
 #define default_logging_level 3
-#define default_net_input_size "90x90"
-#define default_net_output_size "90x90"
+#define default_net_input_size "96x96"
+#define default_net_output_size "96x96"
 #define default_num_gpu_start 0
 #define default_model_folder "models/"
 
-// Todo, have GPU Number, handle, OpenCL/CPU Cases
 OP_API class OpenPoseFace {
 public:
 	std::unique_ptr<op::FaceExtractorCaffe> faceExtractorCaffe;
@@ -65,9 +64,9 @@ public:
 		op::log("", op::Priority::Low, __LINE__, __FUNCTION__, __FILE__);
 		// Step 2 - Read Google flags (user defined configuration)
 		// outputSize
-		const auto outputSize = op::flagsToPoint(FLAGS_net_output_size, "256x256");
+		const auto outputSize = op::flagsToPoint(FLAGS_net_output_size, "96x96");
 		// netInputSize
-		const auto netInputSize = op::flagsToPoint(FLAGS_net_input_size, "256x256");
+		const auto netInputSize = op::flagsToPoint(FLAGS_net_input_size, "96x96");
 
 		// Step 3 - Initialize resources on desired thread (in this case single thread, i.e. we init resources here)
 		faceExtractorCaffe = std::unique_ptr<op::FaceExtractorCaffe>(new op::FaceExtractorCaffe{ netInputSize, outputSize, FLAGS_model_folder, mGpuID });
