@@ -89,7 +89,7 @@ class OpenPoseFace(object):
         size = np.zeros(shape=(3), dtype=np.int32)
         num_faces = len(face_rectangles)
         fr = (RECT*num_faces)(*face_rectangles)
-        self._libop.forward(self.op, image, shape[0], shape[1], ct.byref(fr[0]), num_faces, size)
+        self._libop.forward(self.op, image, shape[0], shape[1], ct.cast(fr, ct.POINTER(RECT)), num_faces, size)
         array = np.zeros(shape=(size), dtype=np.float32)
         self._libop.getOutputs(self.op, array)
         return array

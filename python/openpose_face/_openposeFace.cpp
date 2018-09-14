@@ -77,13 +77,15 @@ public:
 		op::OpOutputToCvMat opOutputToCvMat;
 		op::CvMatToOpInput cvMatToOpInput;
 		op::CvMatToOpOutput cvMatToOpOutput;
+		op::Array<float>& faceKeypointsOrig;
 		if (inputImage.empty())
 			op::error("Could not open or find the image: ", __LINE__, __FUNCTION__, __FILE__);
 		const op::Point<int> imageSize{ inputImage.cols, inputImage.rows };
 
 		// Estimate faceKeypoints
 		faceExtractorCaffe->forwardPass(faceRectangles, inputImage);
-		faceKeypoints = faceExtractorCaffe->getFaceKeypoints();
+		faceKeypointsOrig = faceExtractorCaffe->getFaceKeypoints();
+		faceKeypoints = faceKeypointsOrig.clone();
 	}
 };
 
