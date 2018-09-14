@@ -85,7 +85,7 @@ public:
 		// Estimate faceKeypoints
 		faceExtractorCaffe->forwardPass(faceRectangles, inputImage);
 		faceKeypointsOrig = faceExtractorCaffe->getFaceKeypoints();
-		*faceKeypoints = faceKeypointsOrig.clone();
+		faceKeypoints = faceKeypointsOrig.clone();
 	}
 };
 
